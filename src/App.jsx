@@ -2,6 +2,7 @@ import { Routes, Route, Outlet } from "react-router";
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import Head from "./components/Head";
+import Footer from "./components/Footer";
 import Board from "./pages/Board";
 import LoginPage from "./pages/Login";
 import Register from "./pages/Register";
@@ -34,11 +35,12 @@ function App() {
 
 function Layout() {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Head />
-      <main>
+      <main className="flex-1">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }
