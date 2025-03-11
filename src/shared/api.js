@@ -1,112 +1,64 @@
-import { baseUrl } from './constant'
 import { useNavigate } from "react-router-dom";
 import { setUserInformation, getUserInformation, removeUserInformation } from "../shared/user"
+import api from './utils/api'
+
 
 const useApi = () => {
 
     const navigate = useNavigate();
 
-    const processLogic = ({ call, onSucceed = (json) => { }, onFailed = (err) => { } }) => {
-        call().then(response => {
-            if (response.status === 401 || response.status === 403) {
-                removeUserInformation();
-                navigate("/login");
-                return;
-            } else if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error(`failed with status ${response.status}`);
-            }
+    const register = ({ username, password, confirmPassword }) => {
+        api.post('/auth/register', {
+            username,
+            password,
+            confirmPassword
+        }).then(json => {
+            navigate("/register_success");
         })
-            .then(json => {
-                onSucceed(json);
-            })
-            .catch(err => {
-                console.log("err", err);
-                onFailed(err);
-            })
     }
 
-    const register = ({ username, password})=> {
-        fetch(`${baseUrl}/auth/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-        }) 
-        .then((response)=> {
-            if (response.ok) {
-                navigate("/register_success");
-            } else {
-                const errorData = response.json();
-                throw new Error(`${response.status} ${errorData}`)
-            }
-        })
-        .catch(err => {
-            console.log("err", err);
-        });
-    }
-
-    const login = ({ username, password, rememberMe}) => {
-        fetch(`${baseUrl}/auth/login?remember-me=${rememberMe}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password}),
-        })
-        .then((response)=> {
-            if (response.ok) { 
-               return response.json();
-            } else {
-                const errorData = response.json();
-                throw new Error(`${response.status} ${errorData}`)
-            }
-        })
-        .then(json => {
+    const login = ({ username, password, rememberMe }) => {
+        api.post(`/auth/login?remember-me=${rememberMe}`, {
+            username,
+            password
+        }).then(json => {
             setUserInformation(json.name);
             navigate("/");
         })
-        .catch(err => {
-            console.log("err", err);
-        });
     }
 
     const guestLogin = () => {
-        fetch(`${baseUrl}/auth/anonymous`, {
-            method: "POST",
-            credentials: 'include',
+        api.post('/auth/anonymous').then(json => {
+            setUserInformation(json.name);
+            navigate("/");
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`anonymous login failed, ${response.status}`);
-                } else {
-                    return response.json();
-                }
-            })
-            .then(json => {
-                setUserInformation(json.name);
-                navigate("/");
-            })
     }
 
     const logout = () => {
-        processLogic({
-            call: ()=> {
-                return fetch(`${baseUrl}/auth/logout`, {
-                    method: "POST",
-                })
-            },
-            onSucceed: ()=> {
-                removeUserInformation();
-                navigate("/login");
-            }
+        api.post('/auth/logout').then(() => {
+            removeUserInformation();
+            navigate("/login");
         })
     }
 
-    const getAllTask = ({ onSucceed }) => {
-        processLogic({
-            call: () => {
-                return fetch(`${baseUrl}/task`)            },
-            onSucceed: onSucceed,
-        })
+    const getAllTask = () => {
+        return api.get('/task');
+    }
+
+    const moveCard = (payload)=> {
+        return api.post('/task/moveitem', payload);
+    }
+
+    const reorderCard = (payload) => {
+        return api.post('/task/reorder', payload);
+    }
+
+    const addCard = (payload) => {
+        return api.post('/task', payload);
+    }
+
+    const deleteCard = (id)=> {
+        return api.delete(`/task/${id}`);
     }
 
     return {
@@ -115,6 +67,10 @@ const useApi = () => {
         guestLogin,
         logout,
         getAllTask,
+        moveCard,
+        reorderCard,
+        addCard,
+        deleteCard,
     }
 }
 

@@ -14,7 +14,6 @@ import './App.css'
 const queryClient = new QueryClient();
 
 function App() {
-
   return (
     <div>
       <QueryClientProvider client={queryClient}>
