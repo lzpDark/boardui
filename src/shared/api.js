@@ -72,6 +72,7 @@ const useApi = () => {
     const guestLogin = () => {
         fetch(`${baseUrl}/auth/anonymous`, {
             method: "POST",
+            credentials: 'include',
         })
             .then((response) => {
                 if (!response.ok) {
@@ -91,7 +92,6 @@ const useApi = () => {
             call: ()=> {
                 return fetch(`${baseUrl}/auth/logout`, {
                     method: "POST",
-                    // credentials: 'include',
                 })
             },
             onSucceed: ()=> {
@@ -104,10 +104,7 @@ const useApi = () => {
     const getAllTask = ({ onSucceed }) => {
         processLogic({
             call: () => {
-                return fetch(`${baseUrl}/task`, {
-
-                })
-            },
+                return fetch(`${baseUrl}/task`)            },
             onSucceed: onSucceed,
         })
     }

@@ -53,13 +53,14 @@ const useGlobalState = () => {
             fetch(`${baseUrl}/task/reorder`, {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     state: stateOfColumnId[columnId],
                     fromId: data.columnMap[columnId].items[startIndex].id,
                     toId: data.columnMap[columnId].items[finishIndex].id,
-                })
+                }),
+                credentials: 'include',
             })
                 .then(response => {
                     if (response.ok) {
@@ -110,7 +111,8 @@ const useGlobalState = () => {
                     toState: stateOfColumnId[finishColumnId],
                     fromId: data.columnMap[startColumnId].items[itemIndexInStartColumn].id,
                     toId: data.columnMap[finishColumnId].items.length <= itemIndexInFinishColumn ? null : data.columnMap[finishColumnId].items[itemIndexInFinishColumn].id
-                })
+                }),
+                credentials: 'include',
             }).then(response => {
                 if (response.ok) {
                     return response.json();
@@ -160,6 +162,7 @@ const useGlobalState = () => {
                     state: stateOfColumnId[columnId],
                     description: description,
                 }),
+                credentials: 'include',
             })
                 .then(response => {
                     if (response.ok) {
@@ -191,7 +194,8 @@ const useGlobalState = () => {
 
     const removeCard = useCallback((id) => {
         fetch(`${baseUrl}/task/${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            credentials: 'include',
         })
             .then(response => {
                 if (response.ok) {
