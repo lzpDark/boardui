@@ -1,12 +1,16 @@
+import { Fragment } from "react";
 import { Routes, Route, Outlet } from "react-router";
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { Toaster } from 'react-hot-toast';
 
-import Head from "./components/Head";
-import Footer from "./components/Footer";
 import Board from "./pages/Board";
 import LoginPage from "./pages/Login";
 import Register from "./pages/Register";
 import RegisterSuccess from "./pages/RegisterSuccess";
+import Sample from "./pages/Sample";
+
+import Head from "./components/Head";
+import Footer from "./components/Footer";
 
 import './App.css'
 
@@ -15,7 +19,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div>
+    <Fragment> 
       <QueryClientProvider client={queryClient}>
         <Routes>
           <Route path="/" element={<Layout />} >
@@ -25,10 +29,11 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<Register />} />
           <Route path="register_success" element={<RegisterSuccess />} />
-
+          <Route path="hello-world" element={<Sample />} />
         </Routes>
       </QueryClientProvider >
-    </div>
+      <Toaster position="bottom-right"/>
+    </Fragment>
   )
 }
 
