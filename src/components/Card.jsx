@@ -33,7 +33,7 @@ export const Card = memo(function Card({ item, onDelete }) {
 	}
 
 	return (
-		<div className="card" ref={ref}>
+		<div className="bg-[#e3e3e3] p-2 mb-2 rounded" ref={ref}>
 			<div className='flex flex-row justify-between items-end'>
 				<div>{description}</div>
 				<button onClick={handleClick}><CiTrash /></button>

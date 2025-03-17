@@ -20,11 +20,13 @@ export const Column = memo(({column, removeCard}) => {
 	}, [columnId]);
 
 	return (
-		<div className="min-h-24 column" ref={columnInnerRef}>
+		<div className='flex-1 bg-white p-4 rounded-lg shadow-md m-2' 
+		  ref={columnInnerRef}
+		>
 			<div className='mb-4'>
 				<h3>{column.title}</h3>
 			</div>
-			<div >
+			<div className="overflow-y-auto min-h-[480px] max-h-[480px] max-sm:min-h-24 max-sm:max-h-[200px]" >
 				{column.items.map((item) => {
 					return <Card onDelete={removeCard} item={item} key={item.itemId} />
 				})}

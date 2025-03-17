@@ -111,7 +111,7 @@ export default function Board() {
 			<div className='menu'>
 				<CardInput addCard={addCard} />
 			</div>
-			<div className="boardStyles">
+			<div className="flex flex-row max-sm:flex-col">
 				{data.orderedColumnIds.map((columnId) => {
 					return <Column removeCard={removeCard} column={data.columnMap[columnId]} key={columnId} />;
 				})}
